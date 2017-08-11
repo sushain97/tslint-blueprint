@@ -18,25 +18,22 @@
 import * as Lint from "tslint";
 import * as ts from "typescript";
 
-// tslint:disable max-classes-per-file
-
 export class Rule extends Lint.Rules.AbstractRule {
     public static FAILURE_STRING = "blueprint class name as string forbidden, use Classes.* instead";
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
-        return this.applyWithWalker(new NoStringClassNameWalker(sourceFile, this.getOptions()));
+        return this.applyWithFunction(sourceFile, walk);
     }
 }
 
-class NoStringClassNameWalker extends Lint.RuleWalker {
-    protected visitStringLiteral(node: ts.StringLiteral) {
-        console.log(node.getText());
-        if (node.getText().startsWith("pt-")) {
-            console.log(node.getLastToken());
-            // TODO: a fixer?
-            this.addFailureAtNode(node, Rule.FAILURE_STRING);
+function walk(ctx: Lint.WalkContext<void>) {
+    return ts.forEachChild(ctx.sourceFile, callback);
+
+    function callback(node: ts.Node): void {
+        if (node.kind === ts.SyntaxKind.StringLiteral && (node as ts.StringLiteral).getFullText().startsWith("pt-")) {
+            return ctx.addFailureAtNode(node, Rule.FAILURE_STRING);
         }
 
-        super.visitStringLiteral(node);
+        return ts.forEachChild(node, callback);
     }
 }
