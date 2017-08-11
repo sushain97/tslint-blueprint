@@ -1,5 +1,6 @@
 {
-    "rulesDirectory": "./rules",
+    "rulesDirectory": "./src/rules",
     "rules": {
+        "no-string-class-names": true
     }
 }
