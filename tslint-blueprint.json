@@ -1,6 +1,6 @@
 {
-    "rulesDirectory": "./src/rules",
+    "rulesDirectory": "./rules",
     "rules": {
-        "no-string-class-names": true
+        "blueprint-class-name": true
     }
 }

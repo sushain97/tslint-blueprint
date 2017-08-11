@@ -18,6 +18,8 @@
 import * as Lint from "tslint";
 import * as ts from "typescript";
 
+// tslint:disable max-classes-per-file
+
 export class Rule extends Lint.Rules.AbstractRule {
     public static FAILURE_STRING = "blueprint class name as string forbidden, use Classes.* instead";
 
@@ -28,6 +30,7 @@ export class Rule extends Lint.Rules.AbstractRule {
 
 class NoStringClassNameWalker extends Lint.RuleWalker {
     protected visitStringLiteral(node: ts.StringLiteral) {
+        console.log(node.getText());
         if (node.getText().startsWith("pt-")) {
             console.log(node.getLastToken());
             // TODO: a fixer?
