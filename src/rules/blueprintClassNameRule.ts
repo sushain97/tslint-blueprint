@@ -45,7 +45,6 @@ function walk(ctx: Lint.WalkContext<void>) {
     return ts.forEachChild(ctx.sourceFile, callback);
 
     function callback(node: ts.Node): void {
-        // TODO: check if in JSX and add an option?
         if (node.kind === ts.SyntaxKind.StringLiteral && (node as ts.StringLiteral).text.startsWith("pt-")) {
             return ctx.addFailureAtNode(node, Rule.FAILURE_STRING);
         }
