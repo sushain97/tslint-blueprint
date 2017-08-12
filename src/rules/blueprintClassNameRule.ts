@@ -19,7 +19,22 @@ import * as Lint from "tslint";
 import * as ts from "typescript";
 
 export class Rule extends Lint.Rules.AbstractRule {
-    public static FAILURE_STRING = "blueprint class name as string forbidden, use Classes.* instead";
+    /* tslint:disable:object-literal-sort-keys */
+    public static metadata: Lint.IRuleMetadata = {
+        ruleName: "blueprint-class-name",
+        description: "Checks for Blueprint class names that are expressed as string literals",
+        descriptionDetails: Lint.Utils.dedent
+            `Using string literals instead of a constant from Classes.* exported by Blueprint
+            is prone to typos and prevents compile-time validation of class existence.`,
+        options: null,
+        optionsDescription: "",
+        optionExamples: ["true"],
+        type: "maintainability",
+        typescriptOnly: false,
+    };
+    /* tslint:enable:object-literal-sort-keys */
+
+    public static FAILURE_STRING = "Use a constant from Classes.* instead of a string literal class name";
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         return this.applyWithFunction(sourceFile, walk);
@@ -31,8 +46,7 @@ function walk(ctx: Lint.WalkContext<void>) {
 
     function callback(node: ts.Node): void {
         // TODO: check if in JSX and add an option?
-        if (node.kind === ts.SyntaxKind.StringLiteral && (node as ts.StringLiteral).getFullText().startsWith("pt-")) {
-            // TODO: add a fixer?
+        if (node.kind === ts.SyntaxKind.StringLiteral && (node as ts.StringLiteral).text.startsWith("pt-")) {
             return ctx.addFailureAtNode(node, Rule.FAILURE_STRING);
         }
 

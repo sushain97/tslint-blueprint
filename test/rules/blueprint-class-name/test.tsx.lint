@@ -1,0 +1,4 @@
+const class = "pt-fill";
+              ~~~~~~~~~    [0]
+
+[0]: Use a constant from Classes.* instead of a string literal class name
