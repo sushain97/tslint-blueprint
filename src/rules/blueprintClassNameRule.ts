@@ -17,6 +17,7 @@
 
 import * as Lint from "tslint";
 import * as ts from "typescript";
+import { nodeIsKind } from "../guards";
 
 export class Rule extends Lint.Rules.AbstractRule {
     /* tslint:disable:object-literal-sort-keys */
@@ -45,8 +46,11 @@ function walk(ctx: Lint.WalkContext<void>) {
     return ts.forEachChild(ctx.sourceFile, callback);
 
     function callback(node: ts.Node): void {
-        if (node.kind === ts.SyntaxKind.StringLiteral && (node as ts.StringLiteral).text.startsWith("pt-")) {
-            return ctx.addFailureAtNode(node, Rule.FAILURE_STRING);
+        if (nodeIsKind(node, ts.SyntaxKind.StringLiteral)) {
+            const { text } = (node as ts.StringLiteral);
+            if ((text !== "pt-" && text.startsWith("pt-")) || (text !== ".pt-" && text.startsWith(".pt-"))) {
+                return ctx.addFailureAtNode(node, Rule.FAILURE_STRING);
+            }
         }
 
         return ts.forEachChild(node, callback);
