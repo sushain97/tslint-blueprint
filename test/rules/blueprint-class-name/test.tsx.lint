@@ -15,4 +15,4 @@ document.querySelector(".pt-button")
 
 document.querySelector(".pt")
 
-[0]: Use a constant from Classes.* instead of a string literal class name
+[0]: Use a constant from Classes or IconClasses instead of a string literal

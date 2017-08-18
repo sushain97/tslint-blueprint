@@ -25,8 +25,8 @@ export class Rule extends Lint.Rules.AbstractRule {
         ruleName: "blueprint-class-name",
         description: "Checks for Blueprint class names that are expressed as string literals",
         descriptionDetails: Lint.Utils.dedent
-            `Using string literals instead of a constant from Classes.* exported by Blueprint
-            is prone to typos and prevents compile-time validation of class existence.`,
+            `Using string literals instead of a constant from @blueprintjs/core's Classes or IconClasses
+            is prone to typos and prevents compile-time validation of the CSS class's existence.`,
         options: null,
         optionsDescription: "",
         optionExamples: ["true"],
@@ -35,7 +35,7 @@ export class Rule extends Lint.Rules.AbstractRule {
     };
     /* tslint:enable:object-literal-sort-keys */
 
-    public static FAILURE_STRING = "Use a constant from Classes.* instead of a string literal class name";
+    public static FAILURE_STRING = "Use a constant from Classes or IconClasses instead of a string literal";
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         return this.applyWithFunction(sourceFile, walk);
